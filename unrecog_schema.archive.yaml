@@ -1,0 +1,10 @@
+definitions:
+  sections:
+    ImportantSection:
+      quantities:
+        information:
+          type: int
+          description: The important information of our experiment
+        date:
+          type: str
+          description: The date of our experiment

@@ -1,0 +1,4 @@
+# WELCOME IN THE OUTPUT FILE FROM AN EXPERIMENT
+important_information: 42
+important_date: "2025-05-16T12:00:00"
+unused_data: 13
