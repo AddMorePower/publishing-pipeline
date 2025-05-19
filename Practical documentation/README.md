@@ -9,16 +9,23 @@ This documentation is split into different cases to distinguish if the `data` se
 This is the simplest case, where only a JSON file alone can contain all the information necessary to create the entry in central NOMAD.
 See for instance the example file `unrecog_data_no_data_section.archive.json`.
 
-### A parser plugin is available on the Oasis
-- Access the Oasis and upload your scientific file
-- Once the file is parsed, go to the Data section of the entry \
-![Data tab of an entry](../Images/data_tab.png)
-- Export the full entry in JSON by using the `<>` button at the top of the 'Entry' column \
-![JSON export of an entry](../Images/json_export_button.png)
-- Copy the JSON content \
-![Copy the JSON content](../Images/copy_json_content.png)
-- Paste the content into a text editor and save the file with the extension `.archive.json`
-- Upload this JSON archive into central NOMAD
+<a id="json-parsing"></a>
+### A parser plugin is available
+Two options exists to produce the JSON file:
+- Install the `nomad-lab` package ([here](https://nomad-lab.eu/prod/rae/docs/client/install.html)) and the parser plugin in your Python environment (`git clone` the repository of the parser and `pip install .` once you are located in the cloned repository). 
+Once both are installed, you can used the `parse` command of the `nomad-lab` package to parse your file.
+See the documentation [here](https://nomad-lab.eu/prod/rae/docs/client/cli_ref.html#parse-cli).\
+For instance, you can parse your `unrecog_file.ext` file and produce the JSON entry with this command:
+`nomad parse <path>/<to>/unrecog_file.ext --show-archive > <json_name>.archive.json`.
+
+- Go to an Oasis that has this plugin and upload the file there. Once the file is parsed, go to the Data section of the entry. \
+![Data tab of an entry](../Images/data_tab.png) \
+Export the full entry in JSON by using the `<>` button at the top of the 'Entry' column. \
+![JSON export of an entry](../Images/json_export_button.png) \
+Copy the JSON content. \
+![Copy the JSON content](../Images/copy_json_content.png) \
+Paste the content into a text editor and save the file with the extension `.archive.json`.
+Upload this JSON archive into central NOMAD.
 
 <a id="json-handwriting"></a>
 ### No parser plugin is available
@@ -83,8 +90,8 @@ definitions:
 Just like the JSON archive file, the YAML schema file should have `archive.yaml` as extension in the name of the file.
 
 #### The JSON archive file
-The content of the JSON file should be written using the same logic as the section [above](#json-handwriting), except this time, instead of using the NOMAD Metainfo Browser, one should use the schema file.
-In this case, the `data` section of the JSON archive could look something like this:
+The JSON file should be created using the same logic described in the section [above](#json-parsing).
+As an example, the `data` section of the JSON archive could look something like this:
 ```
 {
   "data": {
@@ -120,4 +127,5 @@ In this case, the `data` section of the JSON archive should be like this:
 
 ### No parser plugin is available
 This is the scenario where both YAML and JSON files have to be written by hand.
-In this case, the [documentation](https://nomad-lab.eu/prod/v1/staging/docs/howto/customization/basics.html) to write YAML schema files will be helpful and see the section [above](#json-handwriting) to write the content in the JSON file and don't forget to add the `m_def` metadata to link the YAML and JSON files.
+In this case, the [documentation](https://nomad-lab.eu/prod/v1/staging/docs/howto/customization/basics.html) to write YAML schema files will be helpful and see the section [above](#json-handwriting) to write the content in the JSON file but this time, use the schema file instead of the NOMAD Metainfo Browser to write the architecture of the metadata.
+Don't forget to add the `m_def` metadata to link the YAML and JSON files.
