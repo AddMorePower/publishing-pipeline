@@ -1,8 +1,10 @@
 {
   "data": {
-    "m_def": "../upload/raw/unrecog_schema.archive.yaml#ImportantSection",
-    "information": 42,
-    "date": "2025-05-16T12:00:00"
+    "m_def": "../upload/raw/unrecog_schema.archive.yaml#ImportantSchema",
+    "important_information": 42,
+    "important_subsection": {
+      "important_date": "2025-05-16T12:00:00"
+    }
   },
   "results": {
     "material": {

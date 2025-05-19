@@ -47,9 +47,6 @@ This case requires the use of a separate schema file to describe the structure o
 
 ### A parser plugin is available on the Oasis
 
-#### The JSON archive file
-Produce the JSON archive file following the steps described above.
-
 #### The YAML archive file
 The parser plugin should have a Python file describing the schema of the `data` section.
 This schema should be translated into a YAML file.
@@ -57,52 +54,68 @@ Documentation about YAML schema files can be found [here](https://nomad-lab.eu/p
 
 For instance, if your Python schema has this structure:
 ```
-class MySubsection(MSection):
-    important_subinformation = Quantity(type=str, shape=["*"])
+class ImportantSubsection(MSection):
+    important_date = Quantity(type=str, description="The date of the experiment")
 
-class MySchema(Schema):
-    important_information = Quantity(type=np.float32, shape=["*", "*"])
-    important_subsection = SubSection(sub_section=MySubsection.m_def, repeats=False)
+class ImportantSchema(Schema):
+    important_information = Quantity(type=int, description="The important information of our experiment)
+    important_subsection = SubSection(sub_section=ImportantSubsection.m_def, repeats=False)
 ```
 The translated YAML file should then be:
 ```
 definitions:
   sections:
-    MySubsection:
+    ImportantSubsection:
       quantities:
-        important_subinformation:
+        important_date:
           type: str
-          shape: ["*"]
-    MySchema:
+          description: The date of the experiment
+    ImportantSchema:
       quantities:
         important_information:
-          type: np.float32
-          shape: ["*", "*"]
+          type: int
+          description: The important information of our experiment
       sub_sections:
         important_subsection:
-          section: MySubsection
+          section: ImportantSubsection
           repeats: false
 ```
 Just like the JSON archive file, the YAML schema file should have `archive.yaml` as extension in the name of the file.
+
+#### The JSON archive file
+The content of the JSON file should be written using the same logic as the section [above](#json-handwriting), except this time, instead of using the NOMAD Metainfo Browser, one should use the schema file.
+In this case, the `data` section of the JSON archive could look something like this:
+```
+{
+  "data": {
+    "important_information": 42,
+    "important_subsection": {
+      "important_date": "2025-05-16T12:00:00"
+    }
+  },
+  {... other sections}
+}
+```
 
 #### Linking the JSON archive to the YAML schema
 For NOMAD to understand that the structure of the `data` section in the JSON corresponds to the schema written in the YAML file, one has to specify this in the `m_def` metadata of the `data` section in the JSON file.
 This link is called a *reference* and can be done in several ways, described [here](https://nomad-lab.eu/prod/v1/staging/docs/howto/customization/basics.html#different-forms-of-references).
 In this case, we will use the references to other files in the same upload or in a different upload, with the references beggining with `../upload`.
 For this example, we will assume that the JSON and YAML files will be in the same upload.
-In this case, the JSON archive should be like this:
+In this case, the `data` section of the JSON archive should be like this:
 ```
 {
-    "data": {
-        "m_def": "../upload/raw/yaml_schema.archive.yaml#MySchema",
-        "important_information": [[1,2], [3,4]],
-        "important_subsection": {
-            "important_subinformation": ["H", "O"]
-        }
+  "data": {
+    "m_def": "../upload/raw/unrecog_schema.archive.yaml#ImportantSchema",
+    "important_information": 42,
+    "important_subsection": {
+      "important_date": "2025-05-16T12:00:00"
     }
+  },
+  {... other sections}
 }
 ```
-
+> Note: In that case, the name of the schema file is `unrecog_schema.archive.yaml`.
 > Note: The YAML schema, being parsed by NOMAD, will create its own entry in the database, only describing the content of the schema. So in this case, by uploading, the JSON and the YAML files, two entries will be produced in the database.
 
 ### No parser plugin is available
