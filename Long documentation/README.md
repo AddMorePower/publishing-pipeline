@@ -56,11 +56,11 @@ But writing JSON files is not really fun and as you have already written your pl
 
 ### Parse in your Oasis, publish on central NOMAD
 When you create an entry in NOMAD, you can navigate through the extracted metadata in the "Data" tab of the entry (see the screenshot below).
-![alt text](data_tab.png)
+![alt text](../Images/data_tab.png)
 Here, you can export each section (each column) in a JSON file by clicking on the "<>" button of the section (see the screenshot below).
-![alt text](export_json_button.png)
+![alt text](../Images/json_export_button.png)
 A visualisation of the JSON content might show up and by clicking on the clipboard icon (see the screenshot below), you can copy the content and save it in a dedicated JSON file.
-![alt text](json_export.png)
+![alt text](../Images/copy_json_content.png)
 
 If you want to export all the entry, export the content of the entry at the first column "Entry" level.
 However, this JSON will contain the "metadata" section that is related to the upload on your Oasis, so you delete this section from the content.
