@@ -1,0 +1,88 @@
+definitions:
+  sections:
+    TXRMOutput:
+      quantities:
+        angles:
+          type: float
+          shape: ["*"]
+        camera_name:
+          type: str
+        current:
+          type: np.float64
+        dates:
+          type: str
+          shape: ["*"]
+        energies:
+          type: np.float64
+          shape: ["*"]
+        exposure_times:
+          type: np.float64
+          shape: ["*"]
+        horizontal_bin:
+          type: int
+        vertical_bin:
+          type: int
+        image_height:
+          type: int
+        image_width:
+          type: int
+        images_taken:
+          type: int
+        ion_chamber_currents:
+          type: np.float64
+          shape: ["*"]
+        mosaic_fast_axis:
+          type: int
+        mosaic_slow_axis:
+          type: int
+        mosaic_column:
+          type: int
+        mosaic_rows:
+          type: int
+        mosaic_mode:
+          type: int
+        nb_images:
+          type: int
+        objective_name:
+          type: str
+        optical_magnification:
+          type: np.float64
+        pixel_size:
+          type: np.float64
+        temperature:
+          type: np.float64
+        x_position:
+          type: np.float64
+          shape: ["*"]
+        y_position:
+          type: np.float64
+          shape: ["*"]
+        z_position:
+          type: np.float64
+          shape: ["*"]
+        xray_magnification:
+          type: np.float64
+          shape: ["*"]
+        zone_plate_name:
+          type: str
+          shape: ["*"]
+        operator:
+          type: str
+        sample_type:
+          type: str
+        sample_subtype:
+          type: str
+        sample_name:
+          type: str
+        elements_thickness:
+          type: str
+        xray_source:
+          type: str
+        resolution:
+          type: str
+        contrast:
+          type: str
+        project:
+          type: str
+        microscope_name:
+          type: str
