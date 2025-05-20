@@ -4,12 +4,16 @@ This is the practical documentation with the steps to publish your unrecognised 
 Here are only listed the steps to publish, for explanations about this whole process, please check the `Long documentation` folder.
 
 This documentation is split into different cases to distinguish if the `data` section is used or not in the final entry in NOMAD and if there is an available parser plugin available.
+- [No `data` section with available parser](#no-data-parser)
+- [No `data` section with no available parser](#no-data-no-parser)
+- [`Data` section with available parser](#data-parser)
+- [`Data` section with no available parser](#data-no-parser)
 
 ## The `data` section is not used
 This is the simplest case, where only a JSON file alone can contain all the information necessary to create the entry in central NOMAD.
 See for instance the example file `unrecog_data_no_data_section.archive.json`.
 
-<a id="json-parsing"></a>
+<a id="no-data-parser"></a>
 ### A parser plugin is available
 Two options exist to produce the JSON file:
 - Install the `nomad-lab` package ([here](https://nomad-lab.eu/prod/rae/docs/client/install.html)) and the parser plugin in your Python environment (`git clone` the repository of the parser and `pip install .` once you are located in the cloned repository). 
@@ -35,7 +39,7 @@ Upload this JSON archive into central NOMAD.
 
 > Note: To be correctly interpreted by NOMAD, the name of the JSON file should end up with `.archive.json`, not only `.json`.
 
-<a id="json-handwriting"></a>
+<a id="no-data-no-parser"></a>
 ### No parser plugin is available
 In this case, the JSON archive file has to be written by hand.
 The use of the [NOMAD Metainfo Browser](https://nomad-lab.eu/prod/v1/gui/analyze/metainfo/nomad.datamodel.datamodel.EntryArchive) might then be really useful.
@@ -64,6 +68,7 @@ However, for big JSON files, the time spent writing the files by hand could bett
 ## The `data` section is used
 This case requires the use of a separate schema file to describe the structure of the metadata storage in the `data` section.
 
+<a id="data-parser"></a>
 ### A parser plugin is available on the Oasis
 
 #### The YAML archive file
@@ -102,7 +107,7 @@ definitions:
 > Note: Just like the JSON archive file, the YAML schema file should have `.archive.yaml` as extension in the name of the file.
 
 #### The JSON archive file
-The JSON file should be created using the same logic described in the section [above](#json-parsing).
+The JSON file should be created using the same logic described in the section [above](#no-data-parser).
 As an example, the `data` section of the JSON archive could look something like this:
 ```
 {
@@ -138,7 +143,8 @@ In this case, the `data` section of the JSON archive should be like this:
 
 > Note: The YAML schema, being parsed by NOMAD, will create its own entry in the database, only describing the content of the schema. So in this case, by uploading, the JSON and the YAML files, two entries will be produced in the database.
 
+<a id="data-no-parser"></a>
 ### No parser plugin is available
 This is the scenario where both YAML and JSON files have to be written by hand.
-In this case, the [documentation](https://nomad-lab.eu/prod/v1/staging/docs/howto/customization/basics.html) to write YAML schema files will be helpful and see the section [above](#json-handwriting) to write the content in the JSON file but this time, use the schema file instead of the NOMAD Metainfo Browser to write the architecture of the metadata.
+In this case, the [documentation](https://nomad-lab.eu/prod/v1/staging/docs/howto/customization/basics.html) to write YAML schema files will be helpful and see the section [above](#no-data-no-parser) to write the content in the JSON file but this time, use the schema file instead of the NOMAD Metainfo Browser to write the architecture of the metadata.
 Don't forget to add the `m_def` metadata to link the YAML and JSON files.
