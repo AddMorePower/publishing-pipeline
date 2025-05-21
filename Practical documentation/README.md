@@ -22,18 +22,18 @@ See the documentation [here](https://nomad-lab.eu/prod/rae/docs/client/cli_ref.h
 For instance, you can parse your `unrecog_file.ext` file and produce the JSON entry with this command:
 `nomad parse <path>/<to>/unrecog_file.ext --show-archive > <json_name>.archive.json`.
 
-- Go to an Oasis that has the parser plugin and upload the file there. Once the file is parsed, go to the Data section of the entry. \
-\
-![Data tab of an entry](../Images/data_tab.png) \
-\
-Export the full entry in JSON by using the `<>` button at the top of the 'Entry' column. \
-\
-![JSON export of an entry](../Images/json_export_button.png) \
-\
-Copy the JSON content. \
-\
-![Copy the JSON content](../Images/copy_json_content.png) \
-\
+- Go to an Oasis that has the parser plugin and upload the file there. Once the file is parsed, go to the Data section of the entry. 
+
+![Data tab of an entry](../Images/data_tab.png) 
+
+Export the full entry in JSON by using the `<>` button at the top of the 'Entry' column. 
+
+![JSON export of an entry](../Images/json_export_button.png) 
+
+Copy the JSON content. 
+
+![Copy the JSON content](../Images/copy_json_content.png) 
+
 Paste the content into a text editor and save the file with the extension `.archive.json`.
 Upload this JSON archive into central NOMAD.
 
@@ -44,10 +44,10 @@ Upload this JSON archive into central NOMAD.
 In this case, the JSON archive file has to be written by hand.
 The use of the [NOMAD Metainfo Browser](https://nomad-lab.eu/prod/v1/gui/analyze/metainfo/nomad.datamodel.datamodel.EntryArchive) might then be really useful.
 By browsing the different sections, one can repeat the same structure within the JSON file.
-For instance, if one wants to fill the elemental composition of the sample studied (let's say it is H2O), according to the NOMAD Metainfo Browser, this can be filled in the following quantity `Entry > results > material > elements`.\
-\
-![Architecture of the elemental composition](../Images/elements_metainfo_tree.png)\
-\
+For instance, if one wants to fill the elemental composition of the sample studied (let's say it is H2O), according to the NOMAD Metainfo Browser, this can be filled in the following quantity `Entry > results > material > elements`.
+
+![Architecture of the elemental composition](../Images/elements_metainfo_tree.png)
+
 The corresponding content in the JSON archive file should then be:
 ```
 {
