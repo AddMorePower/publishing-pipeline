@@ -1,7 +1,9 @@
 {
   "data": {
-    "information": 42,
-    "date": "2025-05-16T12:00:00"
+    "important_information": 42,
+    "important_subsection": {
+      "important_date": "2025-05-16T12:00:00"
+    }
   },
   "results": {
     "material": {
