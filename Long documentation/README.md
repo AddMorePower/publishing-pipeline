@@ -1,8 +1,8 @@
 # How to publish data on central NOMAD when there is no parser for your file formats
 
 ## Disclaimer
-This documentation is not realised by a NOMAD developer and therefore might not reflect the real intent of the NOMAD tool or might not describe the right processes that make NOMAD runs.
-This is made by a user (myself) that gathered knowledge through partial, outdated or accurate pages in the official documentation and available tutorials online.
+This documentation is not written by a NOMAD developer and therefore might not reflect the real intent of the NOMAD tool or might not describe the right processes that make NOMAD runs.
+This is made by a user (myself) that gathered knowledge through partial, outdated or accurate pages of the [official documentation](https://nomad-lab.eu/prod/v1/staging/docs/) and available tutorials on the [Youtube channel](https://www.youtube.com/@TheNOMADLaboratory/playlists) of FAIRmat.
 I managed to make things work for my project in some ways and I think it is valuable to share what I understood along the way.
 
 ## Introduction
@@ -10,11 +10,11 @@ NOMAD offers the possibility to upload files in its database, to parse them auto
 To this extent, NOMAD uses so-called parsers that are pieces of Python code to interpret the content of the files.
 
 ## Parsing files in NOMAD
-When one uploads files on central NOMAD, it will try to open the files and read their content, through an action called _parsing_.
+When one uploads files on central NOMAD, NOMAD will try to open the files and read their content, through an action called _parsing_.
 
 ### Parsers and recognised files
 On central NOMAD, there is a finite set of parsers available.
-One parser is linked to one output of a simulation code (like VASP, FHI-AIMS, ...) or workflow managers (like LOBSTER, FHI-vibes, ...).
+One parser is linked to one output of a simulation code (like VASP, FHI-AIMS, ...) or workflow managers (like LOBSTER, FHI-vibes, ...), see the full list [here](#publish-non-recognised-files-on-central-nomad).
 When you upload some files on NOMAD, each file will be tested against the list of available parsers to see if the file corresponds to the output of a known code.
 If this is the case, the file will be associated to the parser and will be labelled as a _main file_.
 The parser will then extract all the information it can from the file and create an entry to store them.
@@ -24,22 +24,23 @@ So, having at least a file that is handled by the parsers of NOMAD is mandatory 
 
 ### Parsers and unrecognised files
 So if you upload files and not a single file is recognised by any of the parsers, then no main file is available in the upload.
-Following the publication rule above, this upload is therefore not be publishable.
+Following the publication rule above, this upload is therefore not publishable.
 
 ## NOMAD Oasis
 ### Develop your own database
 NOMAD offers the possibility to have your local version of the NOMAD database, a so-called _NOMAD Oasis_.
 Such instance of an Oasis can be equiped with designed tools to add new functionalities compared to central NOMAD.
-These designed tools are called plugins and are of different sorts: schemas, parsers, normalizers, apps or more (see the documentation [here](https://nomad-lab.eu/prod/v1/staging/docs/howto/plugins/plugins.html))
-In our case, we want to publish files that are not recognised by the list of available parsers in the core code of NOMAD, so we would like to develop at least new parsers and most probably to also develop new schemas to store the extracted metadata.
+These designed tools are called plugins and are of different sorts: schemas, parsers, normalizers, apps or more (see the documentation [here](https://nomad-lab.eu/prod/v1/staging/docs/howto/plugins/plugins.html)).
+In our case, we want to publish files that are not recognised by the list of available parsers in the core code of NOMAD, so we would like to develop at least new parsers and most probably develop also new schemas to store the extracted metadata.
 
 ### Developing schemas and parsers plugins
 Some documentation is available to develop your own schemas and parsers plugins:
 - in the official documentation: https://nomad-lab.eu/prod/v1/staging/docs/howto/plugins/parsers.html
 - in tutorial videos on Youtube: https://www.youtube.com/playlist?list=PLrRaxjvn6FDVhfYbSU537bxdKI7oIbIT3
 
-Personally, the tutorial #13 helped me a lot to design my own parsers and integrate them in the Oasis of the project and marked an important milestone in the way an Oasis integrate new pieces of code.
-Since the creation of the plugin mechanism, the integration of new functionalities has been eased and is more reliable through time, to my experience
+Personally, the tutorial #13 helped me a lot to design my own parsers and integrate them in the Oasis of the project.
+I also feel it marked an important milestone in the way an Oasis integrate new pieces of code.
+Since the creation of the plugin mechanism, the integration of new functionalities has been eased and is more reliable through time, to my experience.
 Here is the link to the Github repo for this tutorial and especially to the [part 3](https://github.com/FAIRmat-NFDI/AreaA-Examples/tree/main/tutorial13/part3).
 
 ### Plugins in an Oasis stay in an Oasis
@@ -58,48 +59,49 @@ Also, for anyone to access your files, you will have to make your Oasis public, 
 
 An idea would then be to transfer your entries from your Oasis to the central instance.
 This "uplink" is also visible at the bottom of an upload (see the image below).
-\
-![Publication uplink from Oasis to central NOMAD](../Images/publish_central_nomad_from_oasis.png)\
-\
+
+![Publication uplink from Oasis to central NOMAD](../Images/publish_central_nomad_from_oasis.png)
+
 However, even if this is foreseen by the developers, its implementation is not so straightforward and it raises some limitations discussed [here](https://nomad-lab.eu/prod/v1/staging/docs/explanation/oasis.html#current-limitations-and-plans).
 So, until that link is developed, the entries in your Oasis will stay in your Oasis and to make your files fully public, it might be time to consider publishing them directly on central NOMAD.
 
-## Publish non recognised files on central NOMAD
+## Publish unrecognised files on central NOMAD
 As said earlier, NOMAD has already a finite set of parsers available and the list looks like this at the time of writing these lines:
-\
-![List of the supported codes by NOMAD](../Images/list_supported_codes.png)\
-\
+
+![List of the supported codes by NOMAD](../Images/list_supported_codes.png)
+
 However, this is not the complete list, as it exists some parsers designed for more basic file formats, like JSON or YAML but for these files to be parsed, they must follow the NOMAD conventions, or what I call, the NOMAD language.
 The idea is then to store the descriptive information of your unrecognised files in YAML and/or JSON files following the NOMAD language so that they are recognised by NOMAD.
-Then, the YAML/JSON files will be the main files of the upload with your scientific files as auxiliary files and you will be able to publish everything on central NOMAD.
+Then, the YAML/JSON files become the main files of the upload with your scientific files as auxiliary files and you can publish everything on central NOMAD.
 
-Below, we will discuss on how to fill the YAML/JSON files but first, I have to explain the role of the `data` section of an entry in the necessity to have the YAML file in the upload or not.
+Below, we will discuss how to fill the YAML/JSON files but first, I have to explain the role of the `data` section of an entry in the necessity to have the YAML file in the upload or not.
 
 ### The `data` section
-Just like the plugins you developed have little chance to be integrated in the codebase of central NOMAD, the way you create your schema might need the use of the `data` section.
-
-Using the [NOMAD Metainfo Browser](https://nomad-lab.eu/prod/v1/gui/analyze/metainfo/nomad.datamodel.datamodel.EntryArchive), one can see that an entry might have specific predefined sections, like `run`, `results`, `workflow2` or `data`.
-Each of these sections can be filled during the parsing step but the nature of each of these sections is different.
+When an entry is created in NOMAD, the extracted information from the files is stored in several sections, dependending on the thematic of the information.
+Using the [NOMAD Metainfo Browser](https://nomad-lab.eu/prod/v1/gui/analyze/metainfo/nomad.datamodel.datamodel.EntryArchive), one can see these different predefined sections, like `run`, `results`, `workflow2` or `data`.
+Each of these sections can be filled during the parsing step but the "nature" of each of these sections is different.
 When one looks at the `results` section, there is a fully defined architecture inside, completely handled by the development team.
 
 ![Architecture of the results section](../Images/results_section_architecture.png)
 
-The different tools to search for your data in the `Explore > All > Entries` section of NOMAD relies heavily on this `results` section and therefore should suffer no variation through time.
+The different tools to search for your data in the `Explore > All > Entries` page of NOMAD relies heavily on this `results` section and therefore should suffer no variation through time.
 This is why the architecture of the `results` section is modifiable by no one except the development team.
 Imagine a user creating a schema with a typo in a metadata name, the search tools will then not be able to locate this entry because of the typo in the name of the metadata.
-This rigidity in modification is visible also in other sections, like `run` or `workflow2`.
+This "rigidity" is visible also in other sections, like `run` or `workflow2`.
 
 But what if you need to store an information that is not available in the current state of the available sections, how could you do that?
 Well, look into the content of the `data` section, nothing is defined there and so this is where you will be able to store your designed metadata during the parsing of your files!
 
 ![Architecture of the data section](../Images/data_section_architecture.png)
 
+This is why I distinguish the "nature" of the different sections, `results`, `run`, `workflow2` are handled by the developers but `data` is filled by the users.
+
 ### Filling the `data` section
 As the `data` section doesn't have a predefined structure, the writer of the plugin that needs a designed metadata structure will have to write this metadata structure, the so-called metadata schema.
 In your plugin development, you will then need to create a schema plugin.
 You can find a documentation [page](https://nomad-lab.eu/prod/v1/staging/docs/howto/plugins/schema_packages.html) about this.
 However, when you will publish your entry in central NOMAD, you will have to tell NOMAD what is the metadata schema in the `data` section because for NOMAD, the `data` section is empty.
-You will then need to include a schema file, written in YAML, to this extent but this will be discussed later [here](#schemas-in-yaml-files)
+You will then need to include a schema file, written in YAML but this will be discussed later [here](#schemas-in-yaml-files)
 
 > #### Personal opinion here
 > The documentation might be outdated and confusing when it comes to real development.
@@ -107,11 +109,11 @@ You will then need to include a schema file, written in YAML, to this extent but
 
 > #### Be careful
 > Filling the `data` section with your own metadata won't mean that you will be able to later search for your entries with these metadata.
-> Obviously, NOMAD is not really aware of what you will input so the search tools already designed are not relying on what they don't know, here the content of the `data` section.
+> Obviously, NOMAD is not really aware of what you will input in the `data` section so the search tools already designed are not relying on what they don't know, here the content of the `data` section.
 > So be careful when you create your schema to not store only in the `data` section something that can be already handled by an other section.
 
 ### Data in JSON files
-If one go to an entry in central NOMAD, it is possible to export the content of an entry in the JSON format.
+If one goes to an entry in central NOMAD, it is possible to export the content of an entry in the JSON format.
 Once in an entry, you can navigate through the extracted metadata in the "Data" tab of the entry (see the screenshot below).
 
 ![alt text](../Images/data_tab.png)
@@ -133,8 +135,8 @@ The question now is how to write the JSON related to your files.
 #### Write the JSON by hand
 One tedious solution would be to write the JSON file by hand.
 Using the [NOMAD Metainfo browser](https://nomad-lab.eu/prod/v1/gui/analyze/metainfo/nomad.datamodel.datamodel.EntryArchive), you can see the architecture you need to store your information.
-For instance, if your file is about `H2O` and you want to list the differents elements related to your sample, the NOMAD Metafinfo browser will show you that it is possible to do so in this metadata `Entry > results > material > elements`.
-The related JSON file would than have this written accordingly:
+For instance, if your file is about `H2O` and you want to list the different elements related to your sample, the NOMAD Metafinfo browser will show you that it is possible to do so with this metadata `Entry > results > material > elements`.
+The related JSON file should then be written as:
 ```
 {
   "results": {
@@ -149,12 +151,17 @@ Otherwise, let's meet [below](#schemas-in-yaml-files) to discuss how to fill thi
 
 #### Write the JSON automatically
 An other solution would be to automate the writing of the JSON file.
-That can be done by the creation of a parser plugin.
-Once developed, you might install your parser locally to be able to parse your files with the `nomad parse` [command](https://nomad-lab.eu/prod/v1/staging/docs/reference/cli.html#nomad-parse) from the `nomad-lab` package or you might plug this parser on an Oasis and parse your files through it using the graphical interface and export the JSON content as specified above.
+That can be done with the creation of a parser plugin.
+Once developed, you might install your parser locally to be able to parse your files with the `nomad parse` [command](https://nomad-lab.eu/prod/v1/staging/docs/reference/cli.html#nomad-parse) from the `nomad-lab` package.
+For instance, such a command line would look like:
+```
+nomad parse <path>/<to>/file_to_parse.extension --show-archive > <json_archive_name>.archive.json
+```
+Or you might plug this parser on an Oasis and parse your files there using the graphical interface and export the JSON content as specified above.
 
 > #### The `metadata` section
 > If you chose this option, the automatic parsing of the file will create the `metadata` section. 
-> This section contains information about the upload or the entry (among others) but this information will be wrong to export that on central NOMAD.
+> This section contains information about the upload itself which would be wrong to export on central NOMAD.
 > Indeed, central NOMAD will fill the `metadata` section with its own information when you will upload your JSON files there, so it is better to remove the `metadata` section before publishing on central NOMAD, to avoid collision in the content of this section.
 
 > #### Important point: the `.archive.json` extension
@@ -170,7 +177,7 @@ Except if you decided to use the `data` section.
 When you developed the plugins in your Oasis, at some point, you might have written a Python schema file to store information in the `data` section, to help NOMAD to understand what it should find in the `data` section of the entry.
 This type of schema file can also be written in YAML.
 The advantage of YAML over Python is that NOMAD can parse a YAML file and understands its content if it is written correctly.
-With the goal of publishing unrecognised files on central NOMAD without a parser, if the `data` section is filled, we will need to tell NOMAD how and therefore, need a schema file written in YAML.
+With the goal of publishing unrecognised files on central NOMAD without a parser, if the `data` section is filled, we will need to tell NOMAD how and therefore, need a schema file written in YAML, as Python files are not parsed.
 
 This [package](https://github.com/hampusnasstrom/metainfo-yaml2py) allows one to convert a YAML schema file into a Python schema file.
 Quite useful but this is doing the opposite conversion we want...
@@ -183,7 +190,7 @@ Some [documentation](https://nomad-lab.eu/prod/v1/staging/docs/howto/customizati
 ### Publishing on central NOMAD
 You have now all the tools to publish your unrecognised files on central NOMAD.
 If the `data` section is not used, you can proceed with your JSON file along with the unrecognised files.
-However, if the `data` section is used, then you need a last step to make everything works, you need to tell NOMAD that the content of the JSON file needs to be stored using the schema contained in the YAML file.
+However, if the `data` section is used, then you need a last step to make everything works, you need to tell NOMAD that the content of the JSON file needs to be stored in the entry using the schema contained in the YAML file.
 
 #### Linking the JSON and the YAML files
 When you exported the JSON content of your entry, you might have seen in the `data` section a metadata called `m_def`.
@@ -213,7 +220,7 @@ unused_data: 13
 ```
 
 Here, we would like to parse only the `important` metadata from the `unrecog.txt` file.
-As example, here, the `important_elemental_composition` will not be stored in the `data` section but directly in the good metadata in the `results` section.
+As example, the `important_elemental_composition` will not be stored in the `data` section but directly in the good metadata in the `results` section.
 The content of the YAML file should be something like:
 ```
 definitions:
@@ -258,16 +265,8 @@ As the three files are uploaded in the same upload, we will use the `../upload/r
 {
   "data": {
     "m_def": "../upload/raw/unrecog_schema.archive.yaml#ImportantSchema",
-    "important_information": 42,
-    "important_subsection": {
-      "important_date": "2025-05-16T12:00:00"
-    }
-  },
-  "results": {
-    "material": {
-      "elements": ["H", "O"]
-    }
-  }
+    ...
+
 }
 ```
 
@@ -282,5 +281,5 @@ In fact, two entries are created here, one for the JSON file and one for the YAM
 This is because NOMAD will create an entry for each main file in the upload and as it recognised both the archive JSON and YAML, two entries will be added.
 However, these two entries will share the same list of files, obviously.
 
-In the uploaded filed, one can see that the `unrecog.txt` file is in the upload, so downloadable from the "Files" tab of the entries, but not recognised by NOMAD (there is no gray pill attached to the name of the file in the dropdown menu).
-But even though the `unrecog.txt` file is not recognised, an entry containing its relevant information is still created thanks to the archive JSON file.
+Among the uploaded files, one can see the `unrecog.txt` file, so it is downloadable from the "Files" tab of the entries, but not recognised by NOMAD (there is no gray pill attached to the name of the file in the dropdown menu).
+Even though the `unrecog.txt` file is not recognised, an entry containing its relevant information is still created thanks to the JSON archive file.
